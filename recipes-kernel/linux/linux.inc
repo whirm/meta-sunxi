@@ -151,6 +151,17 @@ do_configure_prepend() {
         kernel_conf_variable RESOURCE_COUNTERS y
     fi
 
+    # Squashfs support
+    if [ "${KERNEL_ENABLE_SQUASHFS}" = "1" ] ; then
+        kernel_conf_variable SQUASHFS y
+        kernel_conf_variable SQUASHFS_FILE_CACHE y
+        kernel_conf_variable SQUASHFS_DECOMP_SINGLE y
+        kernel_conf_variable SQUASHFS_XATTR y
+        kernel_conf_variable SQUASHFS_ZLIB y
+        kernel_conf_variable SQUASHFS_LZO y
+        kernel_conf_variable SQUASHFS_XZ y
+    fi
+
     #
     # root-over-nfs-over-usb-eth support. Limited, but should cover some cases.
     # Enable this by setting a proper CMDLINE_NFSROOT_USB.
