@@ -7,8 +7,8 @@ inherit image_types
 # The disk layout used is:
 #
 #    0                      -> 8*1024                           - reserverd
-#    8*1024                 -> 32*1024                          - 
-#    32*1024                -> 2048*1024                        - 
+#    8*1024                 -> 32*1024                          -
+#    32*1024                -> 2048*1024                        -
 #    2048*1024              -> BOOT_SPACE                       - bootloader and kernel
 #
 #
@@ -68,7 +68,7 @@ IMAGE_CMD_sunxi-sdimg () {
 	BOOT_BLOCKS=$(LC_ALL=C parted -s ${SDIMG} unit b print | awk '/ 1 / { print substr($4, 1, length($4 -1)) / 512 /2 }')
 	mkfs.vfat -n "${BOOTDD_VOLUME_ID}" -S 512 -C ${WORKDIR}/boot.img $BOOT_BLOCKS
 
-	mcopy -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}-${MACHINE}.bin ::uImage
+	mcopy -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}-${MACHINE}.bin ::${KERNEL_IMAGETYPE}
 
 	# Copy device tree file
 	if test -n "${KERNEL_DEVICETREE}"; then
