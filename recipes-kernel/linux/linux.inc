@@ -88,6 +88,56 @@ do_configure_prepend() {
         kernel_conf_variable FRAMEBUFFER_CONSOLE y
     fi
 
+    if [ "${KERNEL_ENABLE_SYSTEMD}" = "1" ] ; then
+	# Kernel Config Options for systemd:
+        kernel_conf_variable DEVTMPFS y
+        kernel_conf_variable CGROUPS y
+        kernel_conf_variable INOTIFY_USER y
+        kernel_conf_variable SIGNALFD y
+        kernel_conf_variable TIMERFD y
+        kernel_conf_variable EPOLL y
+        kernel_conf_variable NET y
+        kernel_conf_variable SYSFS y
+        kernel_conf_variable PROC_FS y
+        kernel_conf_variable FHANDLE y
+
+        kernel_conf_variable DMIID y
+
+        kernel_conf_variable BLK_DEV_BSG y
+
+        kernel_conf_variable NET_NS y
+        kernel_conf_variable DEVPTS_MULTIPLE_INSTANCES y
+
+        kernel_conf_variable IPV6 y
+        kernel_conf_variable AUTOFS4_FS y
+        kernel_conf_variable TMPFS_XATTR y
+        kernel_conf_variable TMPFS_POSIX_ACL y
+        kernel_conf_variable EXT2_POSIX_ACL y
+        kernel_conf_variable EXT3_POSIX_ACL y
+        kernel_conf_variable EXT4_POSIX_ACL y
+        kernel_conf_variable BTRFS_FS_POSIX_ACL y
+        kernel_conf_variable SQUASHFS_POSIX_ACL y
+        kernel_conf_variable XFS_POSIX_ACL y
+        kernel_conf_variable SECCOMP y
+
+        kernel_conf_variable CGROUP_SCHED y
+        kernel_conf_variable FAIR_GROUP_SCHED y
+
+        kernel_conf_variable CFS_BANDWIDTH y
+
+        kernel_conf_variable SCHEDSTATS y
+        kernel_conf_variable SCHED_DEBUG y
+
+        #Legacy hotplug slows down the system and confuses udev:
+        kernel_conf_variable UEVENT_HELPER_PATH ""
+        kernel_conf_variable FW_LOADER_USER_HELPER n
+
+	# Udev will fail to work with the legacy layout:
+        kernel_conf_variable SYSFS_DEPRECATED n
+        kernel_conf_variable AUDIT n
+    fi
+
+
     # Newer inits like systemd need cgroup support
     if [ "${KERNEL_ENABLE_CGROUPS}" = "1" ] ; then
         kernel_conf_variable CGROUP_SCHED y
