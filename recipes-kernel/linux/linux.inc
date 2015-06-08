@@ -36,6 +36,10 @@ kernel_conf_variable() {
 
 do_configure_prepend() {
     echo "" > ${B}/.config
+
+    oe_runmake -C ${S} O=${B} sunxi_defconfig
+    cp .config .config.base
+
     CONF_SED_SCRIPT=""
 
     #
@@ -137,7 +141,6 @@ do_configure_prepend() {
         kernel_conf_variable AUDIT n
     fi
 
-
     # Newer inits like systemd need cgroup support
     if [ "${KERNEL_ENABLE_CGROUPS}" = "1" ] ; then
         kernel_conf_variable CGROUP_SCHED y
@@ -178,8 +181,19 @@ do_configure_prepend() {
         kernel_conf_variable CMDLINE \"${CMDLINE_NFSROOT_USB} ${CMDLINE_DEBUG}\"
     fi
 
+    # Enable/disable extra config flags
+    for FLAG in ${KERNEL_EXTRA_ENABLE}; do
+        kernel_conf_variable ${FLAG} y
+    done
+    for FLAG in ${KERNEL_EXTRA_MODULE}; do
+        kernel_conf_variable ${FLAG} m
+    done
+    for FLAG in ${KERNEL_EXTRA_DISABLE}; do
+        kernel_conf_variable ${FLAG} n
+    done
+
     sed -e "${CONF_SED_SCRIPT}" \
-    < '${WORKDIR}/defconfig' >>'${B}/.config'
+    < .config.base >>'${B}/.config'
 
     yes '' | oe_runmake -C ${S} O=${B} oldconfig
 }
